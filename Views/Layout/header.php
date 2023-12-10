@@ -1,10 +1,6 @@
 <?php
     use Controllers\MedicamentoController;
     use Controllers\PedidoController;
-    use Pagerfanta\Adapter\ArrayAdapter;
-    use Pagerfanta\Pagerfanta;
-
-    
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +9,9 @@
     <meta charset="UTF-8">
     <title>Farmacia PHP Pablo</title>
     <link rel="stylesheet" href="<?=BASE_URL?>src/css/styles.css">
+    <link rel="stylesheet" href="<?=BASE_URL?>vendor/stefangabos/zebra_pagination/public/css/zebra_pagination.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="<?=BASE_URL?>vendor/stefangabos/zebra_pagination/public/javascript/zebra_pagination.js"></script>
 </head>
 <body>
     <header>

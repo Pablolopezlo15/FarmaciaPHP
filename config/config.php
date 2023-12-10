@@ -3,7 +3,7 @@
 define('SERVIDOR', 'localhost');
 define('USUARIO', 'root');
 define('PASSWORD', '');
-define('BASE_DATOS', 'farmacia2');
+define('BASE_DATOS', 'farmacia');
 
 define('BASE_URL', 'http://localhost/FarmaciaPHP/');
 

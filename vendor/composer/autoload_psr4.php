@@ -6,19 +6,12 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Views\\' => array($baseDir . '/Views'),
     'Utils\\' => array($baseDir . '/Utils'),
-    'Pagerfanta\\Twig\\' => array($vendorDir . '/pagerfanta/pagerfanta/lib/Twig'),
-    'Pagerfanta\\Solarium\\' => array($vendorDir . '/pagerfanta/pagerfanta/lib/Adapter/Solarium'),
-    'Pagerfanta\\Elastica\\' => array($vendorDir . '/pagerfanta/pagerfanta/lib/Adapter/Elastica'),
-    'Pagerfanta\\Doctrine\\PHPCRODM\\' => array($vendorDir . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/PHPCRODM'),
-    'Pagerfanta\\Doctrine\\ORM\\' => array($vendorDir . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/ORM'),
-    'Pagerfanta\\Doctrine\\MongoDBODM\\' => array($vendorDir . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/MongoDBODM'),
-    'Pagerfanta\\Doctrine\\DBAL\\' => array($vendorDir . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/DBAL'),
-    'Pagerfanta\\Doctrine\\Collections\\' => array($vendorDir . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/Collections'),
-    'Pagerfanta\\' => array($vendorDir . '/pagerfanta/pagerfanta/lib/Core'),
-    'Pablo\\Tienda\\' => array($baseDir . '/'),
+    'Pablo\\FarmaciaPHP\\' => array($baseDir . '/'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'Models\\' => array($baseDir . '/Models'),
     'Lib\\' => array($baseDir . '/Lib'),
     'Controllers\\' => array($baseDir . '/Controllers'),
+    'Config\\' => array($baseDir . '/Config'),
 );

@@ -1,24 +1,28 @@
 {
-    "name": "pablo/tienda",
-    "description": "Ejemplo MVC",
+    "name": "pablo/farmaciaphp",
+    "description": "Proyecto de Farmacia en PHP",
     "type": "project",
     "autoload": {
         "psr-4": {
-            "Pablo\\Tienda\\": "./",
+            "Pablo\\FarmaciaPHP\\": "./",
             "Controllers\\": "./Controllers",
             "Models\\": "./Models",
             "Lib\\": "./Lib",
-            "Utils\\": "./Utils"
+            "Utils\\": "./Utils",
+            "Config\\": "./Config",
+            "Views\\": "./Views"
         }
     },
     "authors": [
         {
-            "name": "Pablo López Lozano"
+            "name": "Pablo López Lozano",
+            "email": "plopezlozano12@gmail.com"
+
         }
     ],
     "minimum-stability": "stable",
     "require": {
-        "pagerfanta/pagerfanta": "^4.2",
-        "phpmailer/phpmailer": "^6.9"
+        "phpmailer/phpmailer": "^6.9",
+        "stefangabos/zebra_pagination": "^2.4"
     }
 }

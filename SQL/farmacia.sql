@@ -31,8 +31,12 @@ CREATE TABLE IF NOT EXISTS pedidos (
 );
 
 
+-- INSERT DE USUARIOS PROPIETARIO--
+INSERT INTO usuarios (nombre, username, password, rol) 
+VALUES ('Propietario', 'admin', '$2y$04$9B.1UlbrEguAWaggsHOd7uoLhnwfUQ4PSI7JpTwV79RrYGeO.psDm', 'admin');
 
---INSERT DE MEDICAMENTOS DE PRUEBA--
+
+-- INSERT DE MEDICAMENTOS DE PRUEBA--
 
 INSERT INTO medicamentos (nombre, cantidad, importe) VALUES ('Paracetamol', 100, 5.99);
 INSERT INTO medicamentos (nombre, cantidad, importe) VALUES ('Ibuprofeno', 80, 7.50);
@@ -54,3 +58,8 @@ INSERT INTO medicamentos (nombre, cantidad, importe) VALUES ('Ranitidina', 27, 9
 INSERT INTO medicamentos (nombre, cantidad, importe) VALUES ('Clonazepam', 12, 12.99);
 INSERT INTO medicamentos (nombre, cantidad, importe) VALUES ('Warfarina', 10, 17.75);
 INSERT INTO medicamentos (nombre, cantidad, importe) VALUES ('Furosemida', 38, 8.50);
+
+-- INSERT DE PEDIDOS DE PRUEBA--
+
+INSERT INTO pedidos (nombre_cliente, email_cliente, medicamento, fecha_pedido) VALUES
+('Pablo', 'plopezlozano12@gmail.com', 'Paracetamol', '2023-12-09 15:34:14');

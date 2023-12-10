@@ -9,14 +9,13 @@
 <body>
     <h1>¡Su pedido ha sido confirmado!</h1>
     <p>Estimado(a) <?php echo htmlspecialchars($this->nombre_cliente); ?>,</p>
-    <p>Le informamos que su pedido ha está ya disponible para su recogida.</p>
+    <p>Le informamos que su pedido está ya disponible para su recogida.</p>
     <p>Detalles del pedido:</p>
     <ul>
         <li>ID del pedido: <?php echo htmlspecialchars($this->id); ?></li>
         <li>Medicamento: <?php echo htmlspecialchars($this->medicamento); ?></li>
         <li>Fecha del pedido: <?php echo htmlspecialchars($this->fecha_pedido); ?></li>
     </ul>
-    <p>Gracias por elegir Farmacia de Pablo López Lozano.</p>
     <p>Saludos cordiales,</p>
     <p>Farmacia de Pablo López Lozano</p>
 </body>

@@ -7,22 +7,17 @@ namespace Composer\Autoload;
 class ComposerStaticInit4f524e771fdf4b242042587ec2dcc815
 {
     public static $prefixLengthsPsr4 = array (
+        'V' => 
+        array (
+            'Views\\' => 6,
+        ),
         'U' => 
         array (
             'Utils\\' => 6,
         ),
         'P' => 
         array (
-            'Pagerfanta\\Twig\\' => 16,
-            'Pagerfanta\\Solarium\\' => 20,
-            'Pagerfanta\\Elastica\\' => 20,
-            'Pagerfanta\\Doctrine\\PHPCRODM\\' => 29,
-            'Pagerfanta\\Doctrine\\ORM\\' => 24,
-            'Pagerfanta\\Doctrine\\MongoDBODM\\' => 31,
-            'Pagerfanta\\Doctrine\\DBAL\\' => 25,
-            'Pagerfanta\\Doctrine\\Collections\\' => 32,
-            'Pagerfanta\\' => 11,
-            'Pablo\\Tienda\\' => 13,
+            'Pablo\\FarmaciaPHP\\' => 18,
             'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' => 
@@ -36,51 +31,20 @@ class ComposerStaticInit4f524e771fdf4b242042587ec2dcc815
         'C' => 
         array (
             'Controllers\\' => 12,
+            'Config\\' => 7,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Views\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Views',
+        ),
         'Utils\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Utils',
         ),
-        'Pagerfanta\\Twig\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/lib/Twig',
-        ),
-        'Pagerfanta\\Solarium\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/lib/Adapter/Solarium',
-        ),
-        'Pagerfanta\\Elastica\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/lib/Adapter/Elastica',
-        ),
-        'Pagerfanta\\Doctrine\\PHPCRODM\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/PHPCRODM',
-        ),
-        'Pagerfanta\\Doctrine\\ORM\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/ORM',
-        ),
-        'Pagerfanta\\Doctrine\\MongoDBODM\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/MongoDBODM',
-        ),
-        'Pagerfanta\\Doctrine\\DBAL\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/DBAL',
-        ),
-        'Pagerfanta\\Doctrine\\Collections\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/lib/Adapter/Doctrine/Collections',
-        ),
-        'Pagerfanta\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/pagerfanta/pagerfanta/lib/Core',
-        ),
-        'Pablo\\Tienda\\' => 
+        'Pablo\\FarmaciaPHP\\' => 
         array (
             0 => __DIR__ . '/../..' . '/',
         ),
@@ -100,10 +64,15 @@ class ComposerStaticInit4f524e771fdf4b242042587ec2dcc815
         array (
             0 => __DIR__ . '/../..' . '/Controllers',
         ),
+        'Config\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Config',
+        ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Zebra_Pagination' => __DIR__ . '/..' . '/stefangabos/zebra_pagination/Zebra_Pagination.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
