@@ -1,1 +1,1 @@
-# PHP Pryecto Diciembre Farmacia
+# PHP Proyecto Diciembre Farmacia
