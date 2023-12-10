@@ -21,16 +21,28 @@ class UsuarioController
         if (($_SERVER['REQUEST_METHOD']) === 'POST'){
             if ($_POST['data']){
                 $registrado = $_POST['data'];
-
                 $registrado['password'] = password_hash($registrado['password'], PASSWORD_BCRYPT, ['cost'=>4]);
-
                 $usuario = Usuario::fromArray($registrado);
 
-                $save = $usuario->create();
-                if ($save){
-                    $_SESSION['register'] = "complete";
+                if ($usuario->buscaUsername($usuario->getUsername())) {
+                    $errores = ["El usuario ya está registrado en la base de datos."];
+                    $this->pages->render('/usuario/registro', ['errores' => $errores]);
+                    return;
+                }
+
+                $errores = $usuario->validarFormulario($registrado);
+
+                if (empty($errores)) {
+                    $save = $usuario->create();
+                    if ($save){
+                        $_SESSION['register'] = "complete";
+                    } else {
+                        $_SESSION['register'] = "failed";
+                    }
+                    $this->pages->render('/usuario/registro');
+                    exit; 
                 } else {
-                    $_SESSION['register'] = "failed";
+                    $this->pages->render('/usuario/registro', ['errores' => $errores]);
                 }
 
             } else {
@@ -40,6 +52,38 @@ class UsuarioController
         }
 
         $this->pages->render('/usuario/registro');
+    }
+
+    public function crear() {
+        if (isset($_POST['nombre'])) {
+            $medicamento = new Medicamento();
+            $medicamento->setNombre($_POST['nombre']);
+            $medicamento->setStock($_POST['stock']);
+            $medicamento->setPrecio($_POST['precio']);
+
+            if ($medicamento->medicamentoExiste($medicamento->getNombre())) {
+                $errores = ["El medicamento ya existe en la base de datos."];
+                $this->pages->render('medicamentos/mostrarTodos', ['errores' => $errores]);
+                return;
+            }
+            
+            $errores = $medicamento->validarFormulario($_POST['nombre'], $_POST['stock'], $_POST['precio']);
+    
+            if (empty($errores)) {
+                $save = $medicamento->save();
+                if ($save){
+                    $_SESSION['medicamento'] = "complete";
+                } else {
+                    $_SESSION['medicamento'] = "failed";
+                }
+                $this->pages->render('medicamentos/mostrarTodos');
+                exit; 
+            } else {
+                $this->pages->render('medicamentos/mostrarTodos', ['errores' => $errores]);
+            }
+        }
+    
+        $this->pages->render('medicamentos/mostrarTodos');
     }
 
     public function login(){

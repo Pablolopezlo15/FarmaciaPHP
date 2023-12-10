@@ -5,6 +5,7 @@
             <li><a href="<?=BASE_URL?>pedido/crear/">Crear nuevo pedido</a></li>
         </ul>
     </nav>
+
     <table>
         <thead>
             <tr>

@@ -9,9 +9,11 @@ use Pagerfanta\Pagerfanta;
 
 class MedicamentoController {
     private Pages $pages;
+    private $errores = [];
 
     public function __construct() {
         $this->pages = new Pages();
+        $this->errores = [];
     }
 
     public static function obtenerMedicamentos() {
@@ -35,12 +37,30 @@ class MedicamentoController {
             $medicamento->setNombre($_POST['nombre']);
             $medicamento->setStock($_POST['stock']);
             $medicamento->setPrecio($_POST['precio']);
-            $medicamento->save();
-        } else {
-            $this->pages->render('medicamentos/crear');
-        }
-        $this->pages->render('medicamentos/crear');
 
+            if ($medicamento->medicamentoExiste($medicamento->getNombre())) {
+                $errores = ["El medicamento ya existe en la base de datos."];
+                $this->pages->render('medicamentos/mostrarTodos', ['errores' => $errores]);
+                return;
+            }
+            
+            $errores = $medicamento->validarFormulario($_POST['nombre'], $_POST['stock'], $_POST['precio']);
+    
+            if (empty($errores)) {
+                $save = $medicamento->save();
+                if ($save){
+                    $_SESSION['medicamento'] = "complete";
+                } else {
+                    $_SESSION['medicamento'] = "failed";
+                }
+                $this->pages->render('medicamentos/mostrarTodos');
+                exit; 
+            } else {
+                $this->pages->render('medicamentos/mostrarTodos', ['errores' => $errores]);
+            }
+        }
+    
+        $this->pages->render('medicamentos/mostrarTodos');
     }
 
     public function borrar() {
@@ -91,7 +111,6 @@ class MedicamentoController {
             $this->pages->render('medicamentos/mostrarTodos');
         }
     }
-
 
 
 }

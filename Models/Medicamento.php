@@ -10,19 +10,19 @@ class Medicamento
     private $nombre;
     private $stock;
     private $precio;
+    public  $errores;
 
     private BaseDatos $db;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->db = new BaseDatos();
+        $this->errores = [];
     }
 
 
     public function getId(){
         return $this->id;
     }
-
 
     public function setId($id): void{
         $this->id = $id;
@@ -53,6 +53,14 @@ class Medicamento
         $this->precio = $precio;
     }
 
+    public function getErrores(){
+        return $this->errores;
+    }
+
+    public function setErrores($errores): void{
+        $this->errores = $errores;
+    }
+
     public function getAll($ordenacion, $orden) {
         try {
             $stmt = $this->db->prepara("SELECT * FROM medicamentos ORDER BY $ordenacion $orden");
@@ -78,11 +86,6 @@ class Medicamento
     
     public function save() {
         try {
-            $existingMedication = $this->buscarPorNombre($this->getNombre());
-            if (!empty($existingMedication)) {
-                echo "No se puede dar de alta el registro: el nombre del medicamento no se puede repetir.";
-                return;
-            }
             $sql = "INSERT INTO medicamentos VALUES (null, :nombre, :stock, :precio)";
             $stmt = $this->db->prepara($sql);
             $stmt->bindValue(':nombre', $this->getNombre(), PDO::PARAM_STR);
@@ -90,8 +93,10 @@ class Medicamento
             $stmt->bindValue(':precio', $this->getPrecio(), PDO::PARAM_STR);
             $stmt->execute();
             $this->db->close();
+            return true;
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
+            return false;
         }
     }
     
@@ -122,6 +127,19 @@ class Medicamento
         }
     }
     
+    public function medicamentoExiste($nombreMedicamento){
+        try {
+            $stmt = $this->db->prepara("SELECT COUNT(*) as count FROM medicamentos WHERE nombre = :nombre");
+            $stmt->bindValue(':nombre', $nombreMedicamento, PDO::PARAM_STR);
+            $stmt->execute();
+            $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+            return $count > 0;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+
     public function buscarPorNombre($nombre) {
         try {
             $sql = "SELECT * FROM medicamentos WHERE LOWER(nombre) LIKE LOWER(:nombre)";
@@ -135,5 +153,28 @@ class Medicamento
             echo "Error: " . $e->getMessage();
         }
     }
+
+
+    public function validarFormulario($nombre, $stock, $precio) {
+
+        $nombre = filter_var($nombre, FILTER_SANITIZE_STRING);
+        $stock = filter_var($stock, FILTER_VALIDATE_INT);
+        $precio = filter_var($precio, FILTER_VALIDATE_FLOAT);
+
+        if (empty($nombre)) {
+            array_push($this->errores, "El nombre es obligatorio.");
+        }
+    
+        if (empty($stock) || $stock < 0) {
+            array_push($this->errores, "El stock es obligatorio y debe ser un número positivo.");
+        }
+    
+        if (empty($precio) || $precio < 0) {
+            array_push($this->errores, "El importe es obligatorio y debe ser un número positivo.");
+        }
+    
+        return $this->errores;
+    }
+    
 
 }

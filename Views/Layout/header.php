@@ -1,6 +1,8 @@
 <?php
     use Controllers\MedicamentoController;
     use Controllers\PedidoController;
+    use Utils\Utils;
+    
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +27,6 @@
                     <li><a href="<?=BASE_URL?>medicamento/mostrar/">Ver Productos</a></li>
                     <li><a href="<?=BASE_URL?>pedido/mostrar/">Ver Pedidos</a></li>
                 <?php if (isset($_SESSION['login']) && ($_SESSION['login']->rol=='admin' || $_SESSION['login']->rol=='encargado')):?>
-                    <!-- <li><a href="<?=BASE_URL?>medicamento/crear/">Nuevo Producto</a></li> -->
                     <?php if (isset($_SESSION['login']) AND $_SESSION['login']->rol=='admin'):?>
                     <li><a href="<?=BASE_URL?>usuario/registro/">Registrar Nuevo Empleado</a></li>
                     <li><a href="<?=BASE_URL?>usuario/verTodos/">Gestión de empleados</a></li>
@@ -37,9 +38,7 @@
                     <li><a href="<?=BASE_URL?>usuario/logout/">Cerrar Sesión</a></li>
                 </ul>
             </nav>
-
         <?php endif;?>
-
     </header>
 
 

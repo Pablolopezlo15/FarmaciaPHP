@@ -14,6 +14,8 @@ class Pedido {
     private $email_cliente;
     private $medicamento;
     private $fecha_pedido;
+    public  $errores;
+
 
     private BaseDatos $db;
     private Pages $pages;
@@ -21,6 +23,7 @@ class Pedido {
     public function __construct(){
         $this->db = new BaseDatos();
         $this->pages = new Pages();
+        $this->errores = [];
     }
 
     public function getId(){
@@ -110,6 +113,27 @@ class Pedido {
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
+    }
+
+    public function validarFormulario($nombre_cliente, $email_cliente, $medicamento) {
+
+        $nombre_cliente = filter_var($nombre_cliente, FILTER_SANITIZE_STRING);
+        $email_cliente = filter_var($email_cliente, FILTER_SANITIZE_EMAIL);
+        $medicamento = filter_var($medicamento, FILTER_SANITIZE_STRING);
+
+        if (empty($nombre_cliente)) {
+            array_push($this->errores, "El nombre del cliente es obligatorio.");
+        }
+    
+        if (empty($email_cliente) ||  !preg_match('/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/', $email_cliente)) {
+            array_push($this->errores, "El correo electrónico del cliente es obligatorio y debe ser válido.");
+        }
+    
+        if (empty($medicamento)) {
+            array_push($this->errores, "El nombre del medicamento es obligatorio.");
+        }
+    
+        return $this->errores;
     }
 
     public function enviarEmail() {

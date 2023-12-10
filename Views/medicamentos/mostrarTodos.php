@@ -1,3 +1,6 @@
+<?php
+    use Utils\Utils;
+?>
 <h2>Productos</h2>
 <table>
     <tr>
@@ -30,7 +33,7 @@
     <?php foreach ($medicamento as $medicamentos): ?>
         <?php if((isset($_GET['id'])) && ($_GET['id'] == $medicamentos['id'])): ?>
         <tr>
-            <form action="<?=BASE_URL?>medicamento/actualizar/" method="post">
+            <form action="<?=BASE_URL?>medicamento/actualizar/?page=<?=$pagination->get_page()?>" method="post">
                 <td><input type="text" name="nombre" value="<?=$medicamentos['nombre']?>"></td>
                 <td><input type="text" name="stock" value="<?=$medicamentos['cantidad']?>"></td>
                 <td><input type="text" name="precio" value="<?=$medicamentos['importe']?>"></td>
@@ -49,8 +52,8 @@
             <td><?=$medicamentos['importe']?></td>
             <?php if (isset($_SESSION['login']) && ($_SESSION['login']->rol=='admin' || $_SESSION['login']->rol=='encargado')):?>
                 <td>
-                    <a href="<?=BASE_URL?>medicamento/editar/?id=<?=$medicamentos['id']?>"><button>Editar</button></a>
-                    <a href="<?=BASE_URL?>medicamento/borrar/?id=<?=$medicamentos['id']?>"><button>Borrar</button></a>
+                    <a href="<?=BASE_URL?>medicamento/editar/?id=<?=$medicamentos['id']?>&page=<?=$pagination->get_page()?>"><button>Editar</button></a>
+                    <a href="<?=BASE_URL?>medicamento/borrar/?id=<?=$medicamentos['id']?>&page=<?=$pagination->get_page()?>"><button>Borrar</button></a>
                 </td>
             <?php endif;?>
         </tr>
@@ -66,11 +69,8 @@
 </table>
 
 <?php
-// render the pagination links
-$pagination->render();
+    $pagination->render();
 ?>
-
-
 
 <div>
     <h3>Buscar por nombre</h3>
@@ -83,26 +83,39 @@ $pagination->render();
         <input type="submit" value="Buscar">
     </form>
 </div>
+
 <?php if (isset($_SESSION['login']) && ($_SESSION['login']->rol=='admin' || $_SESSION['login']->rol=='encargado')):?>
 
-<div >
+<div>
     <h2>Introduce un nuevo Producto</h2>
+    <?php if(isset($_SESSION['medicamento']) && $_SESSION['medicamento'] == 'complete'): ?>
+        <strong class="exito">Producto creado correctamente</strong>
+    <?php elseif(isset($_SESSION['medicamento']) && $_SESSION['medicamento'] == 'failed'):?>
+        <strong class="error">No se ha podido crear el producto</strong>
+    <?php endif;?>
+    <?php Utils::deleteSession('medicamento');?>
+    <?php if(!empty($errores)): ?>
+        <div id="error" class="error">
+            <?php foreach ($errores as $error): ?>
+                <p><?=$error?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif;?>
     <form action="<?=BASE_URL?>medicamento/crear/" id="nuevoProducto" method="POST">
-        <label for="nombre">Nombre</label>
-        <input type="text" name="nombre" id="nombre" required>
+    <label for="nombre">Nombre</label>
+    <input type="text" name="nombre" id="nombre" value="<?=isset($_POST['nombre']) ? $_POST['nombre'] : ''?>" required>
     
-        <label for="stock">Stock</label>
-        <input type="number" name="stock" id="stock" required>
+    <label for="stock">Stock</label>
+    <input type="number" name="stock" id="stock" value="<?=isset($_POST['stock']) ? $_POST['stock'] : ''?>" required>
     
-        <label for="precio">Precio</label>
-        <input type="text" name="precio" id="precio" required>
-    
+    <label for="precio">Precio</label>
+    <input type="text" name="precio" id="precio" value="<?=isset($_POST['precio']) ? $_POST['precio'] : ''?>" required>
             
-        <input type="submit" value="Crear" required>
-    </form>
+    <input type="submit" value="Crear">
+</form>
 </div>
-
 <?php endif;?>
+
 
 
 

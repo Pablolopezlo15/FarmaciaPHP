@@ -14,12 +14,6 @@ class PedidoController {
         $this->pages = new Pages();
     }
 
-    // public function mostrar(){
-    //     $pedido = new Pedido();
-    //     $pedido->getAll();
-    //     $this->pages->render('pedido/verTodos', ['pedido' => $pedido]);
-    // }
-
     public static function obtenerPedidos() {
         $pedido = new Pedido();
         return $pedido->getAll();
@@ -33,16 +27,29 @@ class PedidoController {
 
     public function crear() {
         if (isset($_POST['nombre_cliente'])) {
+
+            $nombreCliente = $_POST['nombre_cliente'];
+            $emailCliente = $_POST['email_cliente'];
+            $medicamento = $_POST['medicamento'];    
+
             $pedido = new Pedido();
-            $pedido->setNombreCliente($_POST['nombre_cliente']);
-            $pedido->setEmailCliente($_POST['email_cliente']);
-            $pedido->setMedicamento($_POST['medicamento']);
-            $pedido->save();
+            $pedido->setNombreCliente($nombreCliente);
+            $pedido->setEmailCliente($emailCliente);
+            $pedido->setMedicamento($medicamento);
+        
+            $errores = $pedido->validarFormulario($nombreCliente, $emailCliente, $medicamento);
+
+            if (empty($errores)) {
+                $pedido->save();
+                $this->pages->render('pedido/verTodos');
+                exit; 
+            } else {
+                $this->pages->render('pedido/crear', ['errores' => $errores]);
+            }
+
         } else {
             $this->pages->render('pedido/crear');
         }
-        $this->pages->render('pedido/crear');
-
     }
 
     public function borrar() {

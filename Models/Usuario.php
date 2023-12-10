@@ -13,6 +13,7 @@ class Usuario {
     private string $username;
     private string $password;
     private string $rol;
+    private array $errores = [];
 
     private BaseDatos $db;
 
@@ -22,6 +23,7 @@ class Usuario {
         $this->username = $username;
         $this->password = $password;
         $this->rol = $rol;
+        $this->errores = [];
         $this->db = new BaseDatos();
     }
 
@@ -82,25 +84,56 @@ class Usuario {
     }
 
     public function create(): bool {
+        $db = new BaseDatos();
         try {
-            $ins = $this->db->prepara("INSERT INTO usuarios (nombre, username, password, rol) values (:nombre, :username, :password, :rol)");
+            $sql = "INSERT INTO usuarios (nombre, username, password, rol) values (:nombre, :username, :password, :rol)";
+            $stmt = $db->prepara($sql);
+            $stmt->bindValue(':nombre', $this->getNombre(), PDO::PARAM_STR);
+            $stmt->bindValue(':username', $this->getUsername(), PDO::PARAM_STR);
+            $stmt->bindValue(':password', $this->getPassword(), PDO::PARAM_STR);
+            $stmt->bindValue(':rol', $this->getRol(), PDO::PARAM_STR );
     
-            $ins->bindValue(':nombre', $this->getNombre());
-            $ins->bindValue(':username', $this->getUsername());
-            $ins->bindValue(':password', $this->getPassword());
-            $ins->bindValue(':rol', "user");
-    
-            $ins->execute();
+            $stmt->execute();
             $this->db->close();
     
             return true;
         } catch (PDOException $error){
             return false;
-        } finally {
-            $ins->closeCursor();
-            $this->db->close();
         }
     }
+
+    public function validarFormulario($data) {
+
+        $nombre = filter_var(trim($data['nombre']), FILTER_SANITIZE_STRING);
+        $username = filter_var(trim($data['username']), FILTER_SANITIZE_STRING);
+        $password = filter_var(trim($data['password']), FILTER_SANITIZE_STRING);
+        $rol = filter_var(trim($data['rol']), FILTER_SANITIZE_STRING);
+
+        if (empty($nombre)) {
+            array_push($this->errores, "El nombre es obligatorio.");
+        }
+    
+        if (empty($username)) {
+            array_push($this->errores, "El nombre de usuario es obligatorio.");
+        }
+    
+        if (empty($password)) {
+            array_push($this->errores, "La contraseña es obligatoria.");
+        } 
+        elseif (!preg_match('/^(?=.*\d).{6,}$/', $password)) {
+            array_push($this->errores, "La contraseña debe tener al menos 6 caracteres y contener al menos un número.");
+        }
+
+    
+        $rolesPermitidos = ['user', 'encargado', 'admin'];
+        if (!in_array($rol, $rolesPermitidos)) {
+            array_push($this->errores, "Rol no válido.");
+        }
+    
+        return $this->errores;
+    }
+    
+    
 
     public function login(){
         try {
