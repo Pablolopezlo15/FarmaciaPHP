@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
 );
 
 
--- INSERT DE USUARIOS PROPIETARIO--
+-- INSERT DE USUARIOS PROPIETARIO admin admin --
 INSERT INTO usuarios (nombre, username, password, rol) 
 VALUES ('Propietario', 'admin', '$2y$04$9B.1UlbrEguAWaggsHOd7uoLhnwfUQ4PSI7JpTwV79RrYGeO.psDm', 'admin');
 

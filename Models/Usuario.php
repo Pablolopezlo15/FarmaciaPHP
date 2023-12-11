@@ -17,6 +17,14 @@ class Usuario {
 
     private BaseDatos $db;
 
+    /**
+     * Usuario constructor.
+     * @param string|null $id
+     * @param string $nombre
+     * @param string $username
+     * @param string $password
+     * @param string $rol
+     */
     public function __construct(string|null $id, string $nombre, string $username, string $password, string $rol) {
         $this->id = $id;
         $this->nombre = $nombre;
@@ -27,48 +35,85 @@ class Usuario {
         $this->db = new BaseDatos();
     }
 
+    /**
+     * Getters y setters para las propiedades de la clase.
+     */
 
+    /**
+     * @return string|null
+     */
     public function getId(): string | null {
         return $this->id;
     }
 
+    /**
+     * @param string|null $id
+     */
     public function setId(string $id): void {
         $this->id = $id;
     }
 
+    /**
+     * @return string
+     */
     public function getNombre(): string {
         return $this->nombre;
     }
 
+    /**
+     * @param string $nombre
+     */
     public function setNombre(string $nombre): void {
         $this->nombre = $nombre;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername(): string {
         return $this->username;
     }
 
+    /**
+     * @param string $username
+     */
     public function setUsername(string $username): void {
         $this->username = $username;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword(): string {
         return $this->password;
     }
 
+    /**
+     * @param string $password
+     */
     public function setPassword(string $password): void {
         $this->password = $password;
     }
 
+    /**
+     * @return string
+     */
     public function getRol(): string {
         return $this->rol;
     }
 
+    /**
+     * @param string $rol
+     */
     public function setRol(string $rol): void {
         $this->rol = $rol;
     }
 
-
+    /**
+     * Método estático para construir un objeto Usuario a partir de un array de datos.
+     * @param array $data
+     * @return Usuario
+     */
     public static function fromArray(array $data):usuario {
         return new Usuario(
             $data['id'] ?? null,
@@ -79,10 +124,18 @@ class Usuario {
         );
     }
 
+    /**
+     * Desconecta la base de datos.
+     * @return BaseDatos
+     */
     public function desconecta() {
         $this->db->close();
     }
 
+    /**
+     * Crea un nuevo usuario en la base de datos.
+     * @return bool
+     */
     public function create(): bool {
         $db = new BaseDatos();
         try {
@@ -102,7 +155,13 @@ class Usuario {
         }
     }
 
-    public function validarFormulario($data) {
+    /**
+     * Valida el formulario de registro.
+     * Devuelve un array con mensajes de error, si los hay.
+     * @param $data
+     * @return array
+     */
+    public function validarFormularioRegister($data) {
 
         $nombre = filter_var(trim($data['nombre']), FILTER_SANITIZE_STRING);
         $username = filter_var(trim($data['username']), FILTER_SANITIZE_STRING);
@@ -132,9 +191,13 @@ class Usuario {
     
         return $this->errores;
     }
-    
-    
 
+    /**
+     * Realiza el proceso de login.
+     * Devuelve true si la autenticación es exitosa, false en caso contrario.
+     * @param $data
+     * @return bool
+     */
     public function login(){
         try {
             $datosUsuario = $this->buscaUsername($this->getUsername());
@@ -157,6 +220,32 @@ class Usuario {
         return $result;
     }
 
+    /**
+     * Valida el formulario de login.
+     * Devuelve un array con mensajes de error, si los hay.
+     * @param $data
+     * @return array
+     */
+    public function validarFormularioLogin($data) {
+        $username = filter_var(trim($data['username']), FILTER_SANITIZE_STRING);
+        $password = filter_var(trim($data['password']), FILTER_SANITIZE_STRING);
+    
+        if (empty($username)) {
+            array_push($this->errores, "El nombre de usuario es obligatorio.");
+        }
+    
+        if (empty($password)) {
+            array_push($this->errores, "La contraseña es obligatoria.");
+        } 
+        return $this->errores;
+    }
+
+    /**
+     * Busca un usuario por su nombre de usuario.
+     * Devuelve los datos del usuario si existe, false en caso contrario.
+     * @param $username
+     * @return array|bool
+     */
     public function buscaUsername($username){
         $select = $this->db->prepara("SELECT * FROM usuarios WHERE username=:username");
         $select->bindValue(':username', $username, PDO::PARAM_STR);
@@ -176,6 +265,10 @@ class Usuario {
         return $result;
     }
 
+    /**
+     * Obtiene todos los usuarios de la base de datos.
+     * @return array
+     */
     public function getAll() {
         try {
             $stmt = $this->db->prepara("SELECT * FROM usuarios");
@@ -187,6 +280,10 @@ class Usuario {
         }
     }
 
+    /**
+     * Elimina un usuario de la base de datos por su ID.
+     * @param $id
+     */
     public function delete() {
         try {
             $stmt = $this->db->prepara("DELETE FROM usuarios WHERE id = :id");
@@ -198,6 +295,11 @@ class Usuario {
         }
     }
 
+    /**
+     * Asciende a un usuario de rango.
+     * @param $id
+     * @return bool
+     */
     public function ascender($id) {
         try {
             $stmt = $this->db->prepara("SELECT rol FROM usuarios WHERE id = :id");
@@ -228,7 +330,12 @@ class Usuario {
             $this->db->close();
         }
     }
-    
+
+    /**
+     * Degrada a un usuario de rango.
+     * @param $id
+     * @return bool
+     */
     public function degradar($id) {
         try {
             $stmt = $this->db->prepara("SELECT rol FROM usuarios WHERE id = :id");
@@ -260,6 +367,4 @@ class Usuario {
         }
     }
     
-
-
 }

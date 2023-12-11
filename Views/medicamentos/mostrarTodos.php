@@ -30,6 +30,13 @@
                 $records_per_page
             );
         ?>
+        <?php if(!empty($erroresedit)): ?>
+        <div id="error" class="error">
+            <?php foreach ($erroresedit as $error): ?>
+                <p><?=$error?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif;?>
     <?php foreach ($medicamento as $medicamentos): ?>
         <?php if((isset($_GET['id'])) && ($_GET['id'] == $medicamentos['id'])): ?>
         <tr>
@@ -103,13 +110,13 @@
     <?php endif;?>
     <form action="<?=BASE_URL?>medicamento/crear/" id="nuevoProducto" method="POST">
     <label for="nombre">Nombre</label>
-    <input type="text" name="nombre" id="nombre" value="<?=isset($_POST['nombre']) ? $_POST['nombre'] : ''?>" required>
+    <input type="text" name="nombre" id="nombre" value="<?=isset($_POST['nombre']) ? $_POST['nombre'] : ''?>">
     
     <label for="stock">Stock</label>
-    <input type="number" name="stock" id="stock" value="<?=isset($_POST['stock']) ? $_POST['stock'] : ''?>" required>
+    <input type="number" name="stock" id="stock" value="<?=isset($_POST['stock']) ? $_POST['stock'] : ''?>">
     
     <label for="precio">Precio</label>
-    <input type="text" name="precio" id="precio" value="<?=isset($_POST['precio']) ? $_POST['precio'] : ''?>" required>
+    <input type="text" name="precio" id="precio" value="<?=isset($_POST['precio']) ? $_POST['precio'] : ''?>">
             
     <input type="submit" value="Crear">
 </form>

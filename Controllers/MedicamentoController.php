@@ -4,18 +4,21 @@ namespace Controllers;
 
 use Lib\Pages;
 use Models\Medicamento;
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Pagerfanta;
 
 class MedicamentoController {
     private Pages $pages;
-    private $errores = [];
 
+    /**
+     * Constructor del controlador Medicamento.
+     */
     public function __construct() {
         $this->pages = new Pages();
-        $this->errores = [];
     }
 
+    /**
+     * Método estático para obtener todos los medicamentos.
+     * @return array
+     */
     public static function obtenerMedicamentos() {
         $medicamento = new Medicamento();
         $ordenacion = $_GET['ordenacion'] ?? 'nombre';
@@ -23,6 +26,11 @@ class MedicamentoController {
         return $medicamento->getAll($ordenacion, $orden);
     }
 
+    /**
+     * Método estático para obtener un medicamento por su id.
+     * @param $id
+     * @return Medicamento
+     */
     public function mostrar(){
         $medicamento = new Medicamento();
         $ordenacion = $_GET['ordenacion'] ?? 'nombre';
@@ -31,6 +39,12 @@ class MedicamentoController {
         $this->pages->render('medicamentos/mostrarTodos', ['medicamento' => $medicamento]);
     }
 
+    /**
+     * Método para crear un medicamento.
+     * @param $nombre
+     * @param $stock
+     * @param $precio
+     */
     public function crear() {
         if (isset($_POST['nombre'])) {
             $medicamento = new Medicamento();
@@ -45,7 +59,6 @@ class MedicamentoController {
             }
             
             $errores = $medicamento->validarFormulario($_POST['nombre'], $_POST['stock'], $_POST['precio']);
-    
             if (empty($errores)) {
                 $save = $medicamento->save();
                 if ($save){
@@ -63,6 +76,10 @@ class MedicamentoController {
         $this->pages->render('medicamentos/mostrarTodos');
     }
 
+    /**
+     * Método para borrar un medicamento.
+     * @param $id
+     */
     public function borrar() {
         if(isset($_GET['id'])) {
             $medicamento = new Medicamento();
@@ -75,6 +92,10 @@ class MedicamentoController {
         $this->pages->render('medicamentos/mostrarTodos');
     }
 
+    /**
+     * Método para editar un medicamento.
+     * @param $id
+     */
     public function editar() {
         if (isset($_GET['id'])) {
             $medicamento = new Medicamento();
@@ -86,6 +107,13 @@ class MedicamentoController {
         }
     }
 
+    /**
+     * Método para actualizar un medicamento.
+     * @param $id
+     * @param $nombre
+     * @param $stock
+     * @param $precio
+     */
     public function actualizar() {
         if (isset($_POST['id'])) {
             $medicamento = new Medicamento();
@@ -93,20 +121,34 @@ class MedicamentoController {
             $medicamento->setNombre($_POST['nombre']);
             $medicamento->setStock($_POST['stock']);
             $medicamento->setPrecio($_POST['precio']);
+    
+            $erroresedit = $medicamento->validarFormulario($_POST['nombre'], $_POST['stock'], $_POST['precio']);
+            if (!empty($erroresedit)) {
+                $this->pages->render('medicamentos/mostrarTodos', ['erroresedit' => $erroresedit]);
+                return;
+            }
+    
             $medicamento->editar();
+
         } else {
             $this->pages->render('medicamentos/mostrarTodos');
         }
+
         $this->pages->render('medicamentos/mostrarTodos');
     }
 
+    /**
+     * Método para buscar un medicamento por su nombre.
+     * @param $nombre
+     */
     public function buscar() {
         $medicamento = new Medicamento();
     
         if (isset($_POST['nombre'])) {
             $nombreBusqueda = $_POST['nombre'];
             $resultadoBusqueda = $medicamento->buscarPorNombre($nombreBusqueda);
-            $this->pages->render('medicamentos/mostrarPorNombre', ['resultadoBusqueda' => $resultadoBusqueda]);
+            $busquedaPorNombre = true;
+            $this->pages->render('medicamentos/mostrarPorNombre', ['resultadoBusqueda' => $resultadoBusqueda], $busquedaPorNombre);
         } else {
             $this->pages->render('medicamentos/mostrarTodos');
         }

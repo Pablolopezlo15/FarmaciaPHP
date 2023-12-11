@@ -9,22 +9,39 @@ class PedidoController {
     private BaseDatos $db;
     private Pages $pages;
 
+    /**
+     * Constructor del controlador Pedido.
+     */
     public function __construct(){
         $this->db = new BaseDatos();
         $this->pages = new Pages();
     }
 
+    /**
+     * Método estático para obtener todos los pedidos.
+     * @return array
+     */
     public static function obtenerPedidos() {
         $pedido = new Pedido();
         return $pedido->getAll();
     }
     
+    /**
+     * Método para obtener todos los pedidos.
+     * @return Pedido
+     */
     public function mostrar(){
         $pedido = new Pedido();
         $pedido->getAll();
         $this->pages->render('pedido/verTodos', ['pedido' => $pedido]);
     }
 
+    /**
+     * Método para crear un pedido.
+     * @param $nombreCliente
+     * @param $emailCliente
+     * @param $medicamento
+     */
     public function crear() {
         if (isset($_POST['nombre_cliente'])) {
 
@@ -38,12 +55,13 @@ class PedidoController {
             $pedido->setMedicamento($medicamento);
         
             $errores = $pedido->validarFormulario($nombreCliente, $emailCliente, $medicamento);
-
             if (empty($errores)) {
                 $pedido->save();
-                $this->pages->render('pedido/verTodos');
+                $_SESSION['pedido'] = "complete";
+                $this->pages->render('pedido/crear');
                 exit; 
             } else {
+                $_SESSION['pedido'] = "failed";
                 $this->pages->render('pedido/crear', ['errores' => $errores]);
             }
 
@@ -52,6 +70,10 @@ class PedidoController {
         }
     }
 
+    /**
+     * Método para borrar un pedido.
+     * @param $id
+     */
     public function borrar() {
         if(isset($_GET['id'])) {
             $pedido = new Pedido();
@@ -64,6 +86,10 @@ class PedidoController {
         $this->pages->render('pedido/verTodos');
     }
 
+    /**
+     * Método para editar un pedido.
+     * @param $id
+     */
     public function enviarCorreoPedido() {
         $idPedido = $_GET['id'];
         $pedido = new Pedido();

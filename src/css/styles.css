@@ -49,6 +49,11 @@ nav li a:hover{
 
 .error{
     color: red;
+    display: flex;
+    justify-content: left;
+    align-items: flex-start;
+    width: 50%;
+
 }
 .exito{
     color: green;

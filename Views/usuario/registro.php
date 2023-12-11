@@ -19,13 +19,13 @@
     <?php endif;?>
     <form action="<?=BASE_URL?>usuario/registro/" method="POST">
         <label for="nombre">Nombre</label>
-        <input type="text" name="data[nombre]" id="nombre" required>
+        <input type="text" name="data[nombre]" id="nombre">
     
         <label for="username">Username</label>
-        <input type="text" name="data[username]" id="username" required>
+        <input type="text" name="data[username]" id="username">
     
         <label for="password">Contraseña</label>
-        <input type="password" name="data[password]" id="password" required>
+        <input type="password" name="data[password]" id="password">
     
         <label for="rol">Rol</label>
         <select name="data[rol]" id="rol">

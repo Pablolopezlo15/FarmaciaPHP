@@ -1,8 +1,11 @@
 <?php use Utils\Utils;?>
+
+    <div>
+    <h2>Introduce un nuevo Pedido</h2>
     <?php if(isset($_SESSION['pedido']) && $_SESSION['pedido'] == 'complete'): ?>
-        <strong>Producto creado correctamente</strong>
+        <strong class="exito">Producto creado correctamente</strong>
     <?php elseif(isset($_SESSION['pedido']) && $_SESSION['pedido'] == 'failed'):?>
-        <strong>No se ha podido crear el producto</strong>
+        <strong class="error">No se ha podido crear el producto</strong>
     <?php endif;?>
     <?php Utils::deleteSession('pedido');?>
     <?php if(!empty($errores)): ?>
@@ -12,8 +15,6 @@
             <?php endforeach; ?>
         </div>
     <?php endif;?>
-    <div>
-    <h2>Introduce un nuevo Producto</h2>
         <form action="<?=BASE_URL?>pedido/crear/" method="POST">
             <label for="nombre_cliente">Nombre cliente</label>
             <input type="text" name="nombre_cliente" value="<?php echo isset($_POST['nombre_cliente']) ? $_POST['nombre_cliente'] : ''; ?>">

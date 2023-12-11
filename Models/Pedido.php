@@ -20,53 +20,100 @@ class Pedido {
     private BaseDatos $db;
     private Pages $pages;
 
+    /**
+     * Pedido constructor.
+     * @param $id
+     * @param $nombre_cliente
+     * @param $email_cliente
+     * @param $medicamento
+     * @param $fecha_pedido
+     * @param $errores
+     * @param BaseDatos $db
+     * @param Pages $pages
+     */
     public function __construct(){
         $this->db = new BaseDatos();
         $this->pages = new Pages();
         $this->errores = [];
     }
 
+    // Getters y Setters para las propiedades de la clase.
+
+    /**
+     * @return int|null
+     */
     public function getId(){
         return $this->id;
     }
     
+    /**
+     * @param int|null $id
+     */
     public function setId($id): void{
         $this->id = $id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getNombreCliente(){
         return $this->nombre_cliente;
     }
 
+    /**
+     * @param string|null $nombre_cliente
+     */
     public function setNombreCliente($nombre_cliente): void{
         $this->nombre_cliente = $nombre_cliente;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmailCliente(){
         return $this->email_cliente;
     }
 
+    /**
+     * @param string|null $email_cliente
+     */
     public function setEmailCliente($email_cliente): void{
         $this->email_cliente = $email_cliente;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMedicamento(){
         return $this->medicamento;
     }
 
+    /**
+     * @param string|null $medicamento
+     */
     public function setMedicamento($medicamento): void{
         $this->medicamento = $medicamento;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFechaPedido(){
         return $this->fecha_pedido;
     }
 
+    /**
+     * @param string|null $fecha_pedido
+     */
     public function setFechaPedido($fecha_pedido): void{
         $this->fecha_pedido = $fecha_pedido;
     }
 
 
+    /**
+     * Obtiene todos los pedidos.
+     * @return array
+     */
     public function getAll() {
         try {
             $stmt = $this->db->prepara("SELECT * FROM pedidos");
@@ -78,6 +125,11 @@ class Pedido {
         }
     }
 
+    /**
+     * Obtiene un pedido por su id.
+     * @param $id
+     * @return mixed
+     */
     public function getById($id) {
         try {
             $stmt = $this->db->prepara("SELECT * FROM pedidos WHERE id = :id");
@@ -90,6 +142,10 @@ class Pedido {
         }
     }
 
+    /**
+     * Guarda un pedido en la base de datos.
+     * @return mixed
+     */
     public function save() {
         try {
             $sql = "INSERT INTO pedidos (nombre_cliente, email_cliente, medicamento) VALUES (:nombre_cliente, :email_cliente, :medicamento)";
@@ -104,6 +160,10 @@ class Pedido {
         }
     }
 
+    /**
+     * Elimina un pedido de la base de datos por su ID.
+     * @param $id
+     */
     public function delete() {
         try {
             $sql = "DELETE FROM pedidos WHERE id = :id";
@@ -115,6 +175,13 @@ class Pedido {
         }
     }
 
+    /**
+     * Valida los datos del formulario de pedidos.
+     * @param $nombre_cliente
+     * @param $email_cliente
+     * @param $medicamento
+     * @return array
+     */
     public function validarFormulario($nombre_cliente, $email_cliente, $medicamento) {
 
         $nombre_cliente = filter_var($nombre_cliente, FILTER_SANITIZE_STRING);
@@ -136,6 +203,10 @@ class Pedido {
         return $this->errores;
     }
 
+    /**
+     * Envia un correo electrónico al cliente.
+     * @return void
+     */
     public function enviarEmail() {
     /**
      * This example shows settings to use when sending via Google's Gmail servers.
